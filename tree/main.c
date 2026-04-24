@@ -4,7 +4,7 @@
 #include "tree.h"
 
 int main(int argc, char *argv[]) {
-    char *start_dir=(argc > 1 ? argv[1] : "");
+    char *start_dir=(argc > 1 ? argv[1] : ".");
     struct tree_config config={0,0};
 
 

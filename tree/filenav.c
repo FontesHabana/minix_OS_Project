@@ -51,9 +51,14 @@ void walk_dir(const char *path, int level, struct tree_config *config) {
         print_indent(level, is_latest,config);
         printf("%s\n", entry->d_name);
 
-		if(S_ISLNK(st.st_mode)) {
-		printf(" -> (link)\n");
-		}
+    	if (S_ISLNK(st.st_mode)) {
+    		char link_target[PATH_MAX];
+    		ssize_t len = readlink(full_path, link_target, sizeof(link_target)-1);
+    		if (len != -1) {
+    			link_target[len] = '\0';
+    			printf(" -> %s", link_target);
+    		}
+    	}
         if (S_ISDIR(st.st_mode)) {
     	    walk_dir(full_path, level + 1, config);
         }
