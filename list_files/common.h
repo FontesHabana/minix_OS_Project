@@ -9,9 +9,9 @@
 
 typedef enum {
     F_DIRECTORY,
-    F_BIN_ELF,    // Ejecutable  (binario)
-    F_SCRIPT,     // Script con #!
-    F_TEXT,       // Archivo de texto común
+    F_BIN_ELF,
+    F_SCRIPT,
+    F_TEXT,
     F_UNKNOWN
 } FileType;
 
@@ -19,7 +19,6 @@ typedef struct {
     char name[256];
     FileType type;
     off_t size;
-    mode_t permissions;
 
 
 } FileEntry;

@@ -45,6 +45,7 @@ void walk_dir(const char *path, int level, struct tree_config *config) {
 
 
         snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+
         if (lstat(full_path, &st) == -1) continue;
 
 

@@ -74,12 +74,20 @@ void ui_render(BrowserState *state) {
         if (state->has_previous && i < state->previous.count) {
             FileEntry *pe = &state->previous.entries[i];
 
+
             // Indicador de rastro
             if (i == state->previous.selected_index) printf("%s%s> %s", BOLD, GREEN, RESET);
             else printf("  ");
 
             apply_file_color(pe);
-            printf("%-34s%s", format_name(pe->name, 34), RESET);
+           printf("%-34s%s", format_name(pe->name, 34), RESET);
+
+
+
+
+
+
+
         } else {
             printf("%-36s", "");
         }

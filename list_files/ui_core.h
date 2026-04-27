@@ -7,13 +7,10 @@
 
 #include "nav_state.h"
 
-// Limpia la pantalla y posiciona el cursor al inicio
 void ui_init();
 
-// Dibuja el estado completo (dos columnas)
 void ui_render(BrowserState *state);
 
-// Restaura la terminal (limpia antes de salir)
 void ui_shutdown();
 
 

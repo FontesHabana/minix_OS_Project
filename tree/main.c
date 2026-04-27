@@ -8,9 +8,6 @@ int main(int argc, char *argv[]) {
     struct tree_config config={0,0};
 
 
-
-
-
     printf("%s\n", start_dir);
     walk_dir(start_dir, 0, &config);
 

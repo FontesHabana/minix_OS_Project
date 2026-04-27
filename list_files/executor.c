@@ -8,7 +8,6 @@
 #include <sys/wait.h>
 #include "executor.h"
 
-#include <sys/stat.h>
 
 #include "input_handler.h"
 #include "ui_core.h"
@@ -21,7 +20,7 @@ FileType detect_file_type(const char *path) {
     unsigned char magic[4];
     FILE *f = fopen(path, "rb");
 
-    if (f == NULL) return F_TEXT; // Si no podemos abrirlo, intentamos vi igual
+    if (f == NULL) return F_TEXT;
 
     size_t bytes_read = fread(magic, 1, 4, f);
     fclose(f);
@@ -32,17 +31,13 @@ FileType detect_file_type(const char *path) {
         }
     }
 
-    // Si no es un binario, que sea texto por defecto
     return F_TEXT;
 }
 
 void executor_run(const char *path) {
     FileType type = detect_file_type(path);
 
-    if (type == F_UNKNOWN) {
-        // Si no sabemos qué es, no hacemos nada para evitar errores
-        return;
-    }
+
 
     ui_shutdown();
     input_restore();
@@ -50,33 +45,29 @@ void executor_run(const char *path) {
     pid_t pid = fork();
 
     if (pid == -1) {
-        perror("Error en fork");
+        perror("Error");
         return;
     }
 
+    //Child process
     if (pid == 0) {
-        // --- PROCESO HIJO ---
+
         if (type == F_BIN_ELF) {
-            // Intentamos ejecutar el binario
             execlp(path, path, (char *)NULL);
         } else {
-            // Intentamos abrir con vi
-            // IMPORTANTE: vi necesita el nombre del comando como segundo argumento
-            execlp("vim", "vim", path, (char *)NULL);
+            execlp("vi", "vi", path, (char *)NULL);
         }
 
-        // SI LLEGAMOS AQUÍ, ES QUE EXEC FALLÓ
-        perror("Error al ejecutar la aplicacion");
-        exit(1); // MATAR AL HIJO INMEDIATAMENTE
+        perror("Error in execution");
+        exit(1);
     }
+    //Father process
     else {
-        // --- PROCESO PADRE ---
-        wait(NULL); // Esperar a que el hijo (vi o el binario) termine
+        wait(NULL);
 
-        printf("\n\x1b[32m[Regresando al explorador en 3 segundos...]\x1b[0m\n");
-        sleep(3);
 
-        // Volver a tomar el control de la terminal
+        sleep(1);
+
         input_init();
         ui_init();
     }

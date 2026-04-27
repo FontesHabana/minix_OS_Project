@@ -16,15 +16,17 @@
 
 
 int main(int argc, char *argv[]) {
+    //Secure singleton
     if (getenv("LF_ACTIVE") != NULL) {
-        fprintf(stderr, "Error: El explorador ya esta activo.\n");
+        fprintf(stderr, "Error: The explorer is active.\n");
         return 1;
     }
     putenv("LF_ACTIVE=1");
 
-    BrowserState state;
 
-    memset(&state, 0, sizeof(BrowserState)); // Inicializar todo a 0/false
+
+    BrowserState state;
+    memset(&state, 0, sizeof(BrowserState));
 
     char start_path[1024];
     if (argc > 1) strncpy(start_path, argv[1], 1023);

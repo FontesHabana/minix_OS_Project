@@ -20,7 +20,6 @@ static FileType get_basic_type(mode_t m) {
 }
 
 int fs_get_contents(const char *path, DirectoryLevel *level, bool show_hidden) {
-    // 1. Limpieza absoluta
     if (level->entries != NULL) {
         free(level->entries);
         level->entries = NULL;
@@ -30,13 +29,14 @@ int fs_get_contents(const char *path, DirectoryLevel *level, bool show_hidden) {
     level->selected_index = 0;
     level->scroll_offset = 0;
 
+    //Init count and directory
     DIR *dir = opendir(path);
     if (!dir) return -1;
 
     struct dirent *entry;
     int count = 0;
 
-    // 2. Contar con filtro estricto
+
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
         if (!show_hidden && entry->d_name[0] == '.') continue;
@@ -44,13 +44,13 @@ int fs_get_contents(const char *path, DirectoryLevel *level, bool show_hidden) {
     }
 
     level->count = count;
-    level->entries = (FileEntry *)calloc(count, sizeof(FileEntry)); // calloc es más seguro
+    level->entries = (FileEntry *)calloc(count, sizeof(FileEntry));
     if (!level->entries && count > 0) {
         closedir(dir);
         return -2;
     }
 
-    // 3. Llenar con el mismo filtro estricto
+    //Fill directory
     rewinddir(dir);
     int i = 0;
     struct stat file_stat;
@@ -78,7 +78,7 @@ int fs_get_contents(const char *path, DirectoryLevel *level, bool show_hidden) {
     return 0;
 }
 
-// Asegúrate de que compare_entries use strcasecmp para un orden natural
+
 int compare_entries(const void *a, const void *b) {
     const FileEntry *ea = (const FileEntry *)a;
     const FileEntry *eb = (const FileEntry *)b;
@@ -93,16 +93,6 @@ void fs_sort_entries(DirectoryLevel *level) {
 }
 
 
-//Explorar despues
-FileType fs_detect_file_type(const char *full_path) {
-    // Aquí podrías añadir la lógica de leer los primeros bytes (Magic Numbers)
-    // Por ahora usamos stat como base
-    struct stat st;
-    if (stat(full_path, &st) == 0) {
-        return get_basic_type(st.st_mode);
-    }
-    return F_UNKNOWN;
-}
 void fs_free_contents(DirectoryLevel *level) {
     if (level->entries) {
         free(level->entries);
