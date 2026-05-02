@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     } else {
         char proc_path[64];
         sprintf(proc_path, "/proc/%d/psinfo", child_pid);
-
+        printf("time ,priority\n");
         for (int t = 0; t <= 30; t++) {
 
             int status;
