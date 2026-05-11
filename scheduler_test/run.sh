@@ -33,4 +33,7 @@ echo "Running Fork Compete..."
 echo "Running Disk IO..."
 ./tester bin/disk_io > results/$MODE/disk_io.csv
 
+echo "Running Hybrid Test..."
+./tester bin/hybrid_test > results/$MODE/hybrid_test.csv
+
 echo "--- All tests completed for $MODE ---"

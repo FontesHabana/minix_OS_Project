@@ -17,6 +17,7 @@ cc tests/io_bound.c -o bin/io_bound
 cc tests/mixed_burst.c -o bin/mixed_burst
 cc tests/fork_compete.c -o bin/fork_compete
 cc tests/disk_io.c -o bin/disk_io
+cc tests/hybrid_test.c -o bin/hybrid_test
 
 echo "[OK] All test binaries are in /bin folder."
 chmod +x tester
